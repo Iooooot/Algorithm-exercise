@@ -1,49 +1,52 @@
 package 数据结构;
 
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class Main_散列表_拉链法 {
-    static int N = 100003,idx;
-    static int[] h = new int[N];
-    static int[] e = new int[N];
-    static int[] ne = new int[N];
-    public static void add(int x){
-        int k = (x % N + N) % N;
-        e[idx] = x;
-        ne[idx] = h[k];
-        h[k] = idx ++ ;
+    private static int N = 100003,idx;
+    private static int[] h = new int[N];
+    private static int[] e = new int[N];
+    private static int[] ne = new int[N];
+    public static void main(String[] args) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(reader.readLine().split(" ")[0]);
+        for(int i = 0 ; i < N ; i++ ){
+            h[i] = -1;
+        }
+        for (int i = 0; i < n; i++) {
+            String[] s = reader.readLine().split(" ");
+            int num = Integer.parseInt(s[1]);
+            if("I".equals(s[0])){
+                insert(num);
+            }else{
+                if(find(num)){
+                    System.out.println("Yes");
+                }else{
+                    System.out.println("No");
+                }
+            }
+        }
+
     }
-    public static boolean find(int x){
-        int k = (x % N + N) % N;
-        for(int i = h[k];i != -1;i = ne[i]){
-            if(e[i] == x){
+
+    private static boolean find(int num) {
+        int temp = (num % N + N) % N;
+        for (int i = h[temp]; i != -1 ; i = ne[i]) {
+            if(e[i] == num){
                 return true;
             }
         }
         return false;
     }
-    public static void main(String[] args){
-        Scanner scan = new Scanner(System.in);
-        int n = scan.nextInt();
-        idx = 0;
-        for(int i = 0 ; i < N ; i++ ){
-            h[i] = -1;
-        }
-        while(n -- > 0){
-            String x = scan.next();
-            if(x.equals("I")){
-                int a = scan.nextInt();
-                add(a);
-            }else{
-                int b = scan.nextInt();
-                if(find(b)) {
-                    System.out.println("Yes");
-                }
-                else{
-                    System.out.println("No");
-                }
-            }
-        }
-    }
 
+    private static void insert(int num) {
+        int temp = (num % N + N) % N;
+        e[idx] = num;
+        ne[idx] = h[temp];
+        h[temp] = idx++;
+    }
 }
+
+
